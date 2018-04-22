@@ -15,8 +15,16 @@ from bs4 import BeautifulSoup
 import time
 from requests import get
 
-target_url = 'https://www.mtggoldfish.com/spoilers/Dominaria'
-web='https://www.mtggoldfish.com'
+#environment
+DOM = 'https://www.mtggoldfish.com/spoilers/Dominaria'
+RIX = 'https://www.mtggoldfish.com/spoilers/Rivals+of+Ixalan'
+IXA = 'https://www.mtggoldfish.com/spoilers/Ixalan'
+HOU = 'https://www.mtggoldfish.com/spoilers/Hour+of+Devastation'
+AKH = 'https://www.mtggoldfish.com/spoilers/Amonkhet'
+AER = 'https://www.mtggoldfish.com/spoilers/Aether+Revolt'
+KLD = 'https://www.mtggoldfish.com/spoilers/Kaladesh'
+
+web = 'https://www.mtggoldfish.com'
 def get_web(url):
     time.sleep(0.5)
     resp=get(url=url)
@@ -48,6 +56,53 @@ def callback():
 
     return 'OK'
 
+
+def CarouselColor(env):
+    carousel_template = CarouselTemplate(columns=[
+            CarouselColumn(text='選擇顏色', title='請選擇', actions=[
+                MessageTemplateAction(
+                    label='黑色', text=env+'黑色'),
+                MessageTemplateAction(
+                    label='白色', text=env+'白色'),
+                MessageTemplateAction(
+                    label='綠色', text=env+'綠色')
+            ]),
+            CarouselColumn(text='選擇顏色', title='請選擇', actions=[
+                MessageTemplateAction(
+                    label='紅色', text=env+'紅色'),
+                MessageTemplateAction(
+                    label='藍色', text=env+'藍色'),
+                MessageTemplateAction(
+                    label='多色', text=env+'多色')
+            ]),
+            CarouselColumn(text='選擇顏色', title='請選擇', actions=[
+                MessageTemplateAction(
+                    label='無色', text=env+'無色'),
+                MessageTemplateAction(
+                    label='地', text=env+'地'),
+                MessageTemplateAction(
+                    label='--', text='--')
+            ]),
+        ])
+    return carousel_template
+
+def checkenv(env):
+    if env=='DOM':
+        env=DOM
+    if env=='RIX':
+        env=RIX
+    if env=='IXA':
+        env=IXA
+    if env=='HOU':
+        env=HOU
+    if env=='AKH':
+        env=AKH
+    if env=='AER':
+        env=AER
+    if env=='KLD':
+        env=KLD
+    return env
+
 def get_cards(divs):
     content=''
     for div in divs:
@@ -57,172 +112,203 @@ def get_cards(divs):
             link=web+link
             link+='#paper'
             if(link):
-                soup2=BeautifulSoup(get_web(link),'html.parser')
-                price=soup2.find('div','price-box-price').string
+                soup=BeautifulSoup(get_web(link),'html.parser')
+                price=soup.find('div','price-box-price').string
                 content+='{}${}\n{}\n'.format(name,price,link)
     return content
 
 
 ###Black
-def MythicB():
-    soup=BeautifulSoup(get_web(target_url),'html.parser')
+def MythicB(env):
+    env=checkenv(env)
+    soup=BeautifulSoup(get_web(env),'html.parser')
     divs=soup.find_all('div','B Mythic mix spoiler-card')
     content=get_cards(divs)
     return content
-def RareB():
-    soup=BeautifulSoup(get_web(target_url),'html.parser')
+def RareB(env):
+    env=checkenv(env)
+    soup=BeautifulSoup(get_web(env),'html.parser')
     divs=soup.find_all('div','B Rare mix spoiler-card')
     content=get_cards(divs)
     return content
-def UncommonB():
-    soup=BeautifulSoup(get_web(target_url),'html.parser')
+def UncommonB(env):
+    env=checkenv(env)
+    soup=BeautifulSoup(get_web(env),'html.parser')
     divs=soup.find_all('div','B Uncommon mix spoiler-card')
     content=get_cards(divs)
     return content
-def CommonB():
-    soup=BeautifulSoup(get_web(target_url),'html.parser')
+def CommonB(env):
+    env=checkenv(env)
+    soup=BeautifulSoup(get_web(env),'html.parser')
     divs=soup.find_all('div','B Common mix spoiler-card')
     content=get_cards(divs)
     return content
 ###White
-def MythicW():
-    soup=BeautifulSoup(get_web(target_url),'html.parser')
+def MythicW(env):
+    env=checkenv(env)
+    soup=BeautifulSoup(get_web(env),'html.parser')
     divs=soup.find_all('div','Mythic W mix spoiler-card')
     content=get_cards(divs)
     return content
-def RareW():
-    soup=BeautifulSoup(get_web(target_url),'html.parser')
+def RareW(env):
+    env=checkenv(env)
+    soup=BeautifulSoup(get_web(env),'html.parser')
     divs=soup.find_all('div','Rare W mix spoiler-card')
     content=get_cards(divs)
     return content
-def UncommonW():
-    soup=BeautifulSoup(get_web(target_url),'html.parser')
+def UncommonW(env):
+    env=checkenv(env)
+    soup=BeautifulSoup(get_web(env),'html.parser')
     divs=soup.find_all('div','Uncommon W mix spoiler-card')
     content=get_cards(divs)
     return content
-def CommonW():
-    soup=BeautifulSoup(get_web(target_url),'html.parser')
+def CommonW(env):
+    env=checkenv(env)
+    soup=BeautifulSoup(get_web(env),'html.parser')
     divs=soup.find_all('div','Common W mix spoiler-card')
     content=get_cards(divs)
     return content
 ###Red
-def MythicR():
-    soup=BeautifulSoup(get_web(target_url),'html.parser')
+def MythicR(env):
+    env=checkenv(env)
+    soup=BeautifulSoup(get_web(env),'html.parser')
     divs=soup.find_all('div','Mythic R mix spoiler-card')
     content=get_cards(divs)
     return content
-def RareR():
-    soup=BeautifulSoup(get_web(target_url),'html.parser')
+def RareR(env):
+    env=checkenv(env)
+    soup=BeautifulSoup(get_web(env),'html.parser')
     divs=soup.find_all('div','R Rare mix spoiler-card')
     content=get_cards(divs)
     return content
-def UncommonR():
-    soup=BeautifulSoup(get_web(target_url),'html.parser')
+def UncommonR(env):
+    env=checkenv(env)
+    soup=BeautifulSoup(get_web(env),'html.parser')
     divs=soup.find_all('div','R Uncommon mix spoiler-card')
     content=get_cards(divs)
     return content
-def CommonR():
-    soup=BeautifulSoup(get_web(target_url),'html.parser')
+def CommonR(env):
+    env=checkenv(env)
+    soup=BeautifulSoup(get_web(env),'html.parser')
     divs=soup.find_all('div','Common R mix spoiler-card')
     content=get_cards(divs)
     return content
 ###Blue
-def MythicU():
-    soup=BeautifulSoup(get_web(target_url),'html.parser')
+def MythicU(env):
+    env=checkenv(env)
+    soup=BeautifulSoup(get_web(env),'html.parser')
     divs=soup.find_all('div','Mythic U mix spoiler-card')
     content=get_cards(divs)
     return content
-def RareU():
-    soup=BeautifulSoup(get_web(target_url),'html.parser')
+def RareU(env):
+    env=checkenv(env)
+    soup=BeautifulSoup(get_web(env),'html.parser')
     divs=soup.find_all('div','Rare U mix spoiler-card')
     content=get_cards(divs)
     return content
-def UncommonU():
-    soup=BeautifulSoup(get_web(target_url),'html.parser')
+def UncommonU(env):
+    env=checkenv(env)
+    soup=BeautifulSoup(get_web(env),'html.parser')
     divs=soup.find_all('div','U Uncommon mix spoiler-card')
     content=get_cards(divs)
     return content
-def CommonU():
-    soup=BeautifulSoup(get_web(target_url),'html.parser')
+def CommonU(env):
+    env=checkenv(env)
+    soup=BeautifulSoup(get_web(env),'html.parser')
     divs=soup.find_all('div','Common U mix spoiler-card')
     content=get_cards(divs)
     return content
 ###Green
-def MythicG():
-    soup=BeautifulSoup(get_web(target_url),'html.parser')
+def MythicG(env):
+    env=checkenv(env)
+    soup=BeautifulSoup(get_web(env),'html.parser')
     divs=soup.find_all('div','G Mythic mix spoiler-card')
     content=get_cards(divs)
     return content
-def RareG():
-    soup=BeautifulSoup(get_web(target_url),'html.parser')
+def RareG(env):
+    env=checkenv(env)
+    soup=BeautifulSoup(get_web(env),'html.parser')
     divs=soup.find_all('div','G Rare mix spoiler-card')
     content=get_cards(divs)
     return content
-def UncommonG():
-    soup=BeautifulSoup(get_web(target_url),'html.parser')
+def UncommonG(env):
+    env=checkenv(env)
+    soup=BeautifulSoup(get_web(env),'html.parser')
     divs=soup.find_all('div','G Uncommon mix spoiler-card')
     content=get_cards(divs)
     return content
-def CommonG():
-    soup=BeautifulSoup(get_web(target_url),'html.parser')
+def CommonG(env):
+    env=checkenv(env)
+    soup=BeautifulSoup(get_web(env),'html.parser')
     divs=soup.find_all('div','Common G mix spoiler-card')
     content=get_cards(divs)
     return content
 ###Colorless
-def MythicC():
-    soup=BeautifulSoup(get_web(target_url),'html.parser')
+def MythicC(env):
+    env=checkenv(env)
+    soup=BeautifulSoup(get_web(env),'html.parser')
     divs=soup.find_all('div','C Mythic mix spoiler-card')
     content=get_cards(divs)
     return content
-def RareC():
-    soup=BeautifulSoup(get_web(target_url),'html.parser')
+def RareC(env):
+    env=checkenv(env)
+    soup=BeautifulSoup(get_web(env),'html.parser')
     divs=soup.find_all('div','C Rare mix spoiler-card')
     content=get_cards(divs)
     return content
-def UncommonC():
-    soup=BeautifulSoup(get_web(target_url),'html.parser')
+def UncommonC(env):
+    env=checkenv(env)
+    soup=BeautifulSoup(get_web(env),'html.parser')
     divs=soup.find_all('div','C Uncommon mix spoiler-card')
     content=get_cards(divs)
     return content
-def CommonC():
-    soup=BeautifulSoup(get_web(target_url),'html.parser')
+def CommonC(env):
+    env=checkenv(env)
+    soup=BeautifulSoup(get_web(env),'html.parser')
     divs=soup.find_all('div','C Common mix spoiler-card')
     content=get_cards(divs)
     return content
 ###MultiColor
-def MythicM():
-    soup=BeautifulSoup(get_web(target_url),'html.parser')
+def MythicM(env):
+    env=checkenv(env)
+    soup=BeautifulSoup(get_web(env),'html.parser')
     divs=soup.find_all('div','M Mythic mix spoiler-card')
     content=get_cards(divs)
     return content
-def RareM():
-    soup=BeautifulSoup(get_web(target_url),'html.parser')
+def RareM(env):
+    env=checkenv(env)
+    soup=BeautifulSoup(get_web(env),'html.parser')
     divs=soup.find_all('div','M Rare mix spoiler-card')
     content=get_cards(divs)
     return content
-def UncommonM():
-    soup=BeautifulSoup(get_web(target_url),'html.parser')
+def UncommonM(env):
+    env=checkenv(env)
+    soup=BeautifulSoup(get_web(env),'html.parser')
     divs=soup.find_all('div','M Uncommon mix spoiler-card')
     content=get_cards(divs)
     return content
 ###Land
-def RareL():
-    soup=BeautifulSoup(get_web(target_url),'html.parser')
+def RareL(env):
+    env=checkenv(env)
+    soup=BeautifulSoup(get_web(env),'html.parser')
     divs=soup.find_all('div','L Rare mix spoiler-card')
     content=get_cards(divs)
     return content
-def UncommonL():
-    soup=BeautifulSoup(get_web(target_url),'html.parser')
+def UncommonL(env):
+    env=checkenv(env)
+    soup=BeautifulSoup(get_web(env),'html.parser')
     divs=soup.find_all('div','L Uncommon mix spoiler-card')
     content=get_cards(divs)
     return content
-def CommonL():
-    soup=BeautifulSoup(get_web(target_url),'html.parser')
+def CommonL(env):
+    env=checkenv(env)
+    soup=BeautifulSoup(get_web(env),'html.parser')
     divs=soup.find_all('div','Common L mix spoiler-card')
     content=get_cards(divs)
     return content
-def BasicL():
-    soup=BeautifulSoup(get_web(target_url),'html.parser')
+def BasicL(env):
+    env=checkenv(env)
+    soup=BeautifulSoup(get_web(env),'html.parser')
     divs=soup.find_all('div','Basic L Land mix spoiler-card')
     content=get_cards(divs)
     return content
@@ -232,58 +318,92 @@ def BasicL():
 
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
-
+    envionment=''
+    print(event.message.text)
     if event.message.text.upper() == "MTG":
-        buttons_template = TemplateSendMessage(
-            alt_text='MTG template',
-            template=ButtonsTemplate(
-                title='選擇環境',
-                text='請選擇',
-                thumbnail_image_url='https://i.imgur.com/3NYvZzG.jpg',
-                actions=[
-                    MessageTemplateAction(
-                        label='多明納里亞',
-                        text='多明納里亞'
-                    )
-                ]
-            )
-        )
-        line_bot_api.reply_message(event.reply_token, buttons_template)
-        return 0
-    if event.message.text == "多明納里亞":
         carousel_template = CarouselTemplate(columns=[
-            CarouselColumn(text='選擇顏色', title='請選擇', actions=[
+            CarouselColumn(text='選擇環境', title='請選擇', actions=[
                 MessageTemplateAction(
-                    label='黑色', text='DOM黑色'),
+                    label='多明納里亞', text='多明納里亞'),
                 MessageTemplateAction(
-                    label='白色', text='DOM白色'),
+                    label='決勝依夏蘭', text='決勝依夏蘭'),
                 MessageTemplateAction(
-                    label='綠色', text='DOM綠色')
+                    label='依夏蘭', text='決勝依夏蘭')
             ]),
-            CarouselColumn(text='選擇顏色', title='請選擇', actions=[
+            CarouselColumn(text='選擇環境', title='請選擇', actions=[
                 MessageTemplateAction(
-                    label='紅色', text='DOM紅色'),
+                    label='幻滅時刻', text='幻滅時刻'),
                 MessageTemplateAction(
-                    label='藍色', text='DOM藍色'),
+                    label='阿芒凱', text='阿芒凱'),
                 MessageTemplateAction(
-                    label='多色', text='DOM多色')
+                    label='乙太之亂', text='乙太之亂')
             ]),
-            CarouselColumn(text='選擇顏色', title='請選擇', actions=[
+            CarouselColumn(text='選擇環境', title='請選擇', actions=[
                 MessageTemplateAction(
-                    label='無色', text='DOM無色'),
+                    label='卡拉德許', text='卡拉德許'),
                 MessageTemplateAction(
-                    label='地', text='DOM地'),
+                    label='--', text='--'),
                 MessageTemplateAction(
                     label='--', text='--')
-            ]),
+            ])
         ])
         template_message = TemplateSendMessage(
-            alt_text='多明納里亞 template', template=carousel_template)
+            alt_text='envionment template', template=carousel_template)
         line_bot_api.reply_message(event.reply_token, template_message)
         return 0
-    if event.message.text == "DOM黑色":
+    if event.message.text == "多明納里亞":
+        envionment='DOM'
+        carousel_template =CarouselColor(envionment)
+        template_message = TemplateSendMessage(
+            alt_text='envionment template', template=carousel_template)
+        line_bot_api.reply_message(event.reply_token, template_message)
+        return 0
+    if event.message.text == "決勝依夏蘭":
+        envionment='RIX'
+        carousel_template =CarouselColor(envionment)
+        template_message = TemplateSendMessage(
+            alt_text='envionment template', template=carousel_template)
+        line_bot_api.reply_message(event.reply_token, template_message)
+        return 0
+    if event.message.text == "依夏蘭":
+        envionment='IXA'
+        carousel_template =CarouselColor(envionment)
+        template_message = TemplateSendMessage(
+            alt_text='envionment template', template=carousel_template)
+        line_bot_api.reply_message(event.reply_token, template_message)
+        return 0
+    if event.message.text == "幻滅時刻":
+        envionment='HOU'
+        carousel_template =CarouselColor(envionment)
+        template_message = TemplateSendMessage(
+            alt_text='envionment template', template=carousel_template)
+        line_bot_api.reply_message(event.reply_token, template_message)
+        return 0
+    if event.message.text == "阿芒凱":
+        envionment='AKH'
+        carousel_template =CarouselColor(envionment)
+        template_message = TemplateSendMessage(
+            alt_text='envionment template', template=carousel_template)
+        line_bot_api.reply_message(event.reply_token, template_message)
+        return 0
+    if event.message.text == "乙太之亂":
+        envionment='AER'
+        carousel_template =CarouselColor(envionment)
+        template_message = TemplateSendMessage(
+            alt_text='envionment template', template=carousel_template)
+        line_bot_api.reply_message(event.reply_token, template_message)
+        return 0
+    if event.message.text == "卡拉德許":
+        envionment='KLD'
+        carousel_template =CarouselColor(envionment)
+        template_message = TemplateSendMessage(
+            alt_text='envionment template', template=carousel_template)
+        line_bot_api.reply_message(event.reply_token, template_message)
+        return 0
+    if event.message.text.find('黑色')!=-1:
+        envionment = event.message.text[0:3]
         buttons_template = TemplateSendMessage(
-            alt_text='多明納里亞黑色 template',
+            alt_text='黑色 template',
             template=ButtonsTemplate(
                 title='選擇稀有度',
                 text='請選擇',
@@ -291,28 +411,29 @@ def handle_message(event):
                 actions=[
                     MessageTemplateAction(
                         label='Mythic',
-                        text='Black Mythic'
+                        text=envionment+' Black Mythic'
                     ),
                     MessageTemplateAction(
                         label='Rare',
-                        text='Black Rare'
+                        text=envionment+' Black Rare'
                     ),
                     MessageTemplateAction(
                         label='Uncommon',
-                        text='Black Uncommon'
+                        text=envionment+' Black Uncommon'
                     ),
                     MessageTemplateAction(
                         label='Common',
-                        text='Black Common'
+                        text=envionment+' Black Common'
                     )
                 ]
             )
         )
         line_bot_api.reply_message(event.reply_token, buttons_template)
         return 0
-    if event.message.text == "DOM白色":
+    if event.message.text.find('白色')!=-1:
+        envionment = event.message.text[0:3]
         buttons_template = TemplateSendMessage(
-            alt_text='多明納里亞白色 template',
+            alt_text='白色 template',
             template=ButtonsTemplate(
                 title='選擇稀有度',
                 text='請選擇',
@@ -320,28 +441,29 @@ def handle_message(event):
                 actions=[
                     MessageTemplateAction(
                         label='Mythic',
-                        text='White Mythic'
+                        text=envionment+' White Mythic'
                     ),
                     MessageTemplateAction(
                         label='Rare',
-                        text='White Rare'
+                        text=envionment+' White Rare'
                     ),
                     MessageTemplateAction(
                         label='Uncommon',
-                        text='White Uncommon'
+                        text=envionment+' White Uncommon'
                     ),
                     MessageTemplateAction(
                         label='Common',
-                        text='White Common'
+                        text=envionment+' White Common'
                     )
                 ]
             )
         )
         line_bot_api.reply_message(event.reply_token, buttons_template)
         return 0
-    if event.message.text == "DOM紅色":
+    if event.message.text.find('紅色')!=-1:
+        envionment = event.message.text[0:3]
         buttons_template = TemplateSendMessage(
-            alt_text='多明納里亞紅色 template',
+            alt_text='紅色 template',
             template=ButtonsTemplate(
                 title='選擇稀有度',
                 text='請選擇',
@@ -349,28 +471,29 @@ def handle_message(event):
                 actions=[
                     MessageTemplateAction(
                         label='Mythic',
-                        text='Red Mythic'
+                        text=envionment+' Red Mythic'
                     ),
                     MessageTemplateAction(
                         label='Rare',
-                        text='Red Rare'
+                        text=envionment+' Red Rare'
                     ),
                     MessageTemplateAction(
                         label='Uncommon',
-                        text='Red Uncommon'
+                        text=envionment+' Red Uncommon'
                     ),
                     MessageTemplateAction(
                         label='Common',
-                        text='Red Common'
+                        text=envionment+' Red Common'
                     )
                 ]
             )
         )
         line_bot_api.reply_message(event.reply_token, buttons_template)
         return 0
-    if event.message.text == "DOM藍色":
+    if event.message.text.find('藍色')!=-1:
+        envionment = event.message.text[0:3]
         buttons_template = TemplateSendMessage(
-            alt_text='多明納里亞藍色 template',
+            alt_text='藍色 template',
             template=ButtonsTemplate(
                 title='選擇稀有度',
                 text='請選擇',
@@ -378,28 +501,29 @@ def handle_message(event):
                 actions=[
                     MessageTemplateAction(
                         label='Mythic',
-                        text='Blue Mythic'
+                        text=envionment+' Blue Mythic'
                     ),
                     MessageTemplateAction(
                         label='Rare',
-                        text='Blue Rare'
+                        text=envionment+' Blue Rare'
                     ),
                     MessageTemplateAction(
                         label='Uncommon',
-                        text='Blue Uncommon'
+                        text=envionment+' Blue Uncommon'
                     ),
                     MessageTemplateAction(
                         label='Common',
-                        text='Blue Common'
+                        text=envionment+' Blue Common'
                     )
                 ]
             )
         )
         line_bot_api.reply_message(event.reply_token, buttons_template)
         return 0
-    if event.message.text == "DOM綠色":
+    if event.message.text.find('綠色')!=-1:
+        envionment = event.message.text[0:3]
         buttons_template = TemplateSendMessage(
-            alt_text='多明納里亞綠色 template',
+            alt_text='綠色 template',
             template=ButtonsTemplate(
                 title='選擇稀有度',
                 text='請選擇',
@@ -407,28 +531,29 @@ def handle_message(event):
                 actions=[
                     MessageTemplateAction(
                         label='Mythic',
-                        text='Green Mythic'
+                        text=envionment+' Green Mythic'
                     ),
                     MessageTemplateAction(
                         label='Rare',
-                        text='Green Rare'
+                        text=envionment+' Green Rare'
                     ),
                     MessageTemplateAction(
                         label='Uncommon',
-                        text='Green Uncommon'
+                        text=envionment+' Green Uncommon'
                     ),
                     MessageTemplateAction(
                         label='Common',
-                        text='Green Common'
+                        text=envionment+' Green Common'
                     )
                 ]
             )
         )
         line_bot_api.reply_message(event.reply_token, buttons_template)
         return 0
-    if event.message.text == "DOM無色":
+    if event.message.text.find('無色')!=-1:
+        envionment = event.message.text[0:3]
         buttons_template = TemplateSendMessage(
-            alt_text='多明納里亞無色 template',
+            alt_text='無色 template',
             template=ButtonsTemplate(
                 title='選擇稀有度',
                 text='請選擇',
@@ -436,28 +561,29 @@ def handle_message(event):
                 actions=[
                     MessageTemplateAction(
                         label='Mythic',
-                        text='Colorless Mythic'
+                        text=envionment+' Colorless Mythic'
                     ),
                     MessageTemplateAction(
                         label='Rare',
-                        text='Colorless Rare'
+                        text=envionment+' Colorless Rare'
                     ),
                     MessageTemplateAction(
                         label='Uncommon',
-                        text='Colorless Uncommon'
+                        text=envionment+' Colorless Uncommon'
                     ),
                     MessageTemplateAction(
                         label='Common',
-                        text='Colorless Common'
+                        text=envionment+' Colorless Common'
                     )
                 ]
             )
         )
         line_bot_api.reply_message(event.reply_token, buttons_template)
         return 0
-    if event.message.text == "DOM多色":
+    if event.message.text.find('多色')!=-1:
+        envionment = event.message.text[0:3]
         buttons_template = TemplateSendMessage(
-            alt_text='多明納里亞多色 template',
+            alt_text='多色 template',
             template=ButtonsTemplate(
                 title='選擇稀有度',
                 text='請選擇',
@@ -465,24 +591,25 @@ def handle_message(event):
                 actions=[
                     MessageTemplateAction(
                         label='Mythic',
-                        text='MultiColor Mythic'
+                        text=envionment+' MultiColor Mythic'
                     ),
                     MessageTemplateAction(
                         label='Rare',
-                        text='MultiColor Rare'
+                        text=envionment+' MultiColor Rare'
                     ),
                     MessageTemplateAction(
                         label='Uncommon',
-                        text='MultiColor Uncommon'
+                        text=envionment+' MultiColor Uncommon'
                     )
                 ]
             )
         )
         line_bot_api.reply_message(event.reply_token, buttons_template)
         return 0
-    if event.message.text == "DOM地":
+    if event.message.text.find('地')!=-1:
+        envionment = event.message.text[0:3]
         buttons_template = TemplateSendMessage(
-            alt_text='多明納里亞地 template',
+            alt_text='地 template',
             template=ButtonsTemplate(
                 title='選擇稀有度',
                 text='請選擇',
@@ -490,207 +617,238 @@ def handle_message(event):
                 actions=[
                     MessageTemplateAction(
                         label='Rare',
-                        text='Land Rare'
+                        text=envionment+' Land Rare'
                     ),
                     MessageTemplateAction(
                         label='Uncommon',
-                        text='Land Uncommon'
+                        text=envionment+' Land Uncommon'
                     ),
                     MessageTemplateAction(
                         label='Common',
-                        text='Land Common'
+                        text=envionment+' Land Common'
                     ),
                     MessageTemplateAction(
                         label='Basic',
-                        text='Basic Land'
+                        text=envionment+' Basic Land'
                     )
                 ]
             )
         )
         line_bot_api.reply_message(event.reply_token, buttons_template)
         return 0
-    if event.message.text == "Black Mythic":
-        content = MythicB()
+    if event.message.text.find('Black Mythic')!=-1:
+        envionment = event.message.text[0:3]
+        content = MythicB(envionment)
         line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(text=content))
         return 0
-    if event.message.text == "Black Rare":
-        content = RareB()
+    if event.message.text.find('Black Rare')!=-1:
+        envionment = event.message.text[0:3]
+        content = RareB(envionment)
         line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(text=content))
         return 0
-    if event.message.text == "Black Uncommon":
-        content = UncommonB()
+    if event.message.text.find('Black Uncommon')!=-1:
+        envionment = event.message.text[0:3]
+        content = UncommonB(envionment)
         line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(text=content))
         return 0
-    if event.message.text == "Black Common":
-        content = CommonB()
+    if event.message.text.find('Black Common')!=-1:
+        envionment = event.message.text[0:3]
+        content = CommonB(envionment)
         line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(text=content))
         return 0
-    if event.message.text == "White Mythic":
-        content = MythicW()
+    if event.message.text.find('White Mythic')!=-1:
+        envionment = event.message.text[0:3]
+        content = MythicW(envionment)
         line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(text=content))
         return 0
-    if event.message.text == "White Rare":
-        content = RareW()
+    if event.message.text.find('White Rare')!=-1:
+        envionment = event.message.text[0:3]
+        content = RareW(envionment)
         line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(text=content))
         return 0
-    if event.message.text == "White Uncommon":
-        content = UncommonW()
+    if event.message.text.find('White Uncommon')!=-1:
+        envionment = event.message.text[0:3]
+        content = UncommonW(envionment)
         line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(text=content))
         return 0
-    if event.message.text == "White Common":
-        content = CommonW()
+    if event.message.text.find('White Common')!=-1:
+        envionment = event.message.text[0:3]
+        content = CommonW(envionment)
         line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(text=content))
         return 0
-    if event.message.text == "Red Mythic":
-        content = MythicR()
+    if event.message.text.find('Red Mythic')!=-1:
+        envionment = event.message.text[0:3]
+        content = MythicR(envionment)
         line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(text=content))
         return 0
-    if event.message.text == "Red Rare":
-        content = RareR()
+    if event.message.text.find('Red Rare')!=-1:
+        envionment = event.message.text[0:3]
+        content = RareR(envionment)
         line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(text=content))
         return 0
-    if event.message.text == "Red Uncommon":
-        content = UncommonR()
+    if event.message.text.find('Red Uncommon')!=-1:
+        envionment = event.message.text[0:3]
+        content = UncommonR(envionment)
         line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(text=content))
         return 0
-    if event.message.text == "Red Common":
-        content = CommonR()
+    if event.message.text.find('Red Common')!=-1:
+        envionment = event.message.text[0:3]
+        content = CommonR(envionment)
         line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(text=content))
         return 0
-    if event.message.text == "Blue Mythic":
-        content = MythicU()
+    if event.message.text.find('Blue Mythic')!=-1:
+        envionment = event.message.text[0:3]
+        content = MythicU(envionment)
         line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(text=content))
         return 0
-    if event.message.text == "Blue Rare":
-        content = RareU()
+    if event.message.text.find('Blue Rare')!=-1:
+        envionment = event.message.text[0:3]
+        content = RareU(envionment)
         line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(text=content))
         return 0
-    if event.message.text == "Blue Uncommon":
-        content = UncommonU()
+    if event.message.text.find('Blue Uncommon')!=-1:
+        envionment = event.message.text[0:3]
+        content = UncommonU(envionment)
         line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(text=content))
         return 0
-    if event.message.text == "Blue Common":
-        content = CommonU()
+    if event.message.text.find('Blue Common')!=-1:
+        envionment = event.message.text[0:3]
+        content = CommonU(envionment)
         line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(text=content))
         return 0
-    if event.message.text == "Green Mythic":
-        content = MythicG()
+    if event.message.text.find('Green Mythic')!=-1:
+        envionment = event.message.text[0:3]
+        content = MythicG(envionment)
         line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(text=content))
         return 0
-    if event.message.text == "Green Rare":
-        content = RareG()
+    if event.message.text.find('Green Rare')!=-1:
+        envionment = event.message.text[0:3]
+        content = RareG(envionment)
         line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(text=content))
         return 0
-    if event.message.text == "Green Uncommon":
-        content = UncommonG()
+    if event.message.text.find('Green Uncommon')!=-1:
+        envionment = event.message.text[0:3]
+        content = UncommonG(envionment)
         line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(text=content))
         return 0
-    if event.message.text == "Green Common":
-        content = CommonG()
+    if event.message.text.find('Green Common')!=-1:
+        envionment = event.message.text[0:3]
+        content = CommonG(envionment)
         line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(text=content))
         return 0
-    if event.message.text == "Colorless Mythic":
-        content = MythicC()
+    if event.message.text.find('Colorless Mythic')!=-1:
+        envionment = event.message.text[0:3]
+        content = MythicC(envionment)
         line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(text=content))
         return 0
-    if event.message.text == "Colorless Rare":
-        content = RareC()
+    if event.message.text.find('Colorless Rare')!=-1:
+        envionment = event.message.text[0:3]
+        content = RareC(envionment)
         line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(text=content))
         return 0
-    if event.message.text == "Colorless Uncommon":
-        content = UncommonC()
+    if event.message.text.find('Colorless Uncommon')!=-1:
+        envionment = event.message.text[0:3]
+        content = UncommonC(envionment)
         line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(text=content))
         return 0
-    if event.message.text == "Colorless Common":
-        content = CommonC()
+    if event.message.text.find('Colorless Common')!=-1:
+        envionment = event.message.text[0:3]
+        content = CommonC(envionment)
         line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(text=content))
         return 0
-    if event.message.text == "MultiColor Mythic":
-        content = MythicM()
+    if event.message.text.find('MultiColor Mythic')!=-1:
+        envionment = event.message.text[0:3]
+        content = MythicM(envionment)
         line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(text=content))
         return 0
-    if event.message.text == "MultiColor Rare":
-        content = RareM()
+    if event.message.text.find('MultiColor Rare')!=-1:
+        envionment = event.message.text[0:3]
+        content = RareM(envionment)
         line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(text=content))
         return 0
-    if event.message.text == "MultiColor Uncommon":
-        content = UncommonM()
+    if event.message.text.find('MultiColor Uncommon')!=-1:
+        envionment = event.message.text[0:3]
+        content = UncommonM(envionment)
         line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(text=content))
         return 0
-    if event.message.text == "Land Rare":
-        content = RareL()
+    if event.message.text.find('Land Rare')!=-1:
+        envionment = event.message.text[0:3]
+        content = RareL(envionment)
         line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(text=content))
         return 0
-    if event.message.text == "Land Uncommon":
-        content = UncommonL()
+    if event.message.text.find('Land Uncommon')!=-1:
+        envionment = event.message.text[0:3]
+        content = UncommonL(envionment)
         line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(text=content))
         return 0
-    if event.message.text == "Land Common":
-        content = CommonL()
+    if event.message.text.find('Land Common')!=-1:
+        envionment = event.message.text[0:3]
+        content = CommonL(envionment)
         line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(text=content))
         return 0
-    if event.message.text == "Basic Land":
-        content = BasicL()
+    if event.message.text.find('Basic Land')!=-1:
+        envionment = event.message.text[0:3]
+        content = BasicL(envionment)
         line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(text=content))
