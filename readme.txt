@@ -23,7 +23,10 @@ https://yaoandy107.github.io/line-bot-tutorial/#%E4%BD%BF%E7%94%A8-Heroku-CLI
 
 
 後記:
-如果做出來想要更換環境,可以修改target_url最後環境的名稱,依據mtggoldfish命名方式,ex:Ixalan,Rivals+of+Ixalan,Amonket...等等等
 目前使用的機器人id:@wxg8107f
 目前只有多明納里亞環境,未來有時間會想辦法將其他環境做進去XD
-如有其他建議或是有bug請回覆至:https://www.sli.do/   code=#A229
+如有其他建議或是有bug可以在主頁下面留言給我,會盡快做修復
+
+#20180423
+已經將目前標準內所有環境的爬蟲設計完成
+測試階段中還請大家多多找bugXD
