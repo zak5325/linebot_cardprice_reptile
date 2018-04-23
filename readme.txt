@@ -1,3 +1,9 @@
+MTG卡價機器人
+	設計為查詢即時卡價,其依據為金魚網上paper價
+	機器人id:@wxg8107f
+	OB測試中,歡迎各路測試找bug
+
+
 部署步驟:
 1.heroku login
 	{heroku email}
@@ -23,7 +29,6 @@ https://yaoandy107.github.io/line-bot-tutorial/#%E4%BD%BF%E7%94%A8-Heroku-CLI
 
 
 後記:
-目前使用的機器人id:@wxg8107f
 目前只有多明納里亞環境,未來有時間會想辦法將其他環境做進去XD
 如有其他建議或是有bug可以在主頁下面留言給我,會盡快做修復
 
