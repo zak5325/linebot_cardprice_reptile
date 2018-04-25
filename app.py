@@ -112,10 +112,13 @@ def get_cards(divs):
             link=web+link
             link+='#paper'
             if(link):
+                paperprice=''
                 soup=BeautifulSoup(get_web(link),'html.parser')
                 paper=soup.find_all('div','price-box paper')
                 for price in paper:
                     paperprice=price.find('div','price-box-price').string
+                    if paperprice=='':
+                        papereprice='--'
                 content+='{}${}\n{}\n'.format(name,paperprice,link)
                 print(content)
     return content
@@ -331,7 +334,7 @@ def handle_message(event):
                 MessageTemplateAction(
                     label='決勝依夏蘭', text='決勝依夏蘭'),
                 MessageTemplateAction(
-                    label='依夏蘭', text='決勝依夏蘭')
+                    label='依夏蘭', text='依夏蘭')
             ]),
             CarouselColumn(text='選擇環境', title='請選擇', actions=[
                 MessageTemplateAction(
