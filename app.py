@@ -134,7 +134,7 @@ def get_cards(divs):
                     if paperprice=='':
                         papereprice='--'
                 content+='{}${}\n{}\n'.format(name,paperprice,link)
-                print(content)
+    print(content)
     return content
 
 
