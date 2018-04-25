@@ -126,13 +126,13 @@ def get_cards(divs):
             link=web+link
             link+='#paper'
             if(link):
-                paperprice=''
                 soup=BeautifulSoup(get_web(link),'html.parser')
                 paper=soup.find_all('div','price-box paper')
-                for price in paper:
-                    paperprice=price.find('div','price-box-price').string
-                    if paperprice=='':
-                        papereprice='--'
+                if len(paper):
+                    for price in paper:
+                        paperprice=price.find('div','price-box-price').string
+                else:
+                    paperprice='----'
                 content+='{}${}\n{}\n'.format(name,paperprice,link)
     print(content)
     return content
