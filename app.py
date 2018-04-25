@@ -103,6 +103,20 @@ def checkenv(env):
         env=KLD
     return env
 
+#測試:增加閃卡選擇
+# def foilask():
+#     message = TemplateSendMessage(
+#     alt_text='是否查詢閃卡',
+#     template=ConfirmTemplate(
+#         text='請選擇?',
+#         actions=[
+#             MessageTemplateAction(label='普卡', text='普卡'),
+#             MessageTemplateAction(label='閃卡', text='閃卡')
+#             ]
+#         )
+#     )
+#     line_bot_api.reply_message(event.reply_token, message)
+
 def get_cards(divs):
     content=''
     for div in divs:
