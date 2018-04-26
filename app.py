@@ -133,11 +133,23 @@ def get_cards(divs):
                         paperprice=price.find('div','price-box-price').string
                 else:
                     paperprice='----'
-                #foil=soup.find('a','otherPrintingsLinkPaper').string
-                content+='{}普:${}\n{}\n'.format(name,paperprice,link)
-                #content+='{}普:${}\n閃:${}\n{}\n'.format(name,paperprice,foil,link)
+            content+='{}普:${}\n{}\n'.format(name,paperprice,link)
+            """
+            link_part1=link.split('/')[0]+'/'+link.split('/')[1]+'/'+link.split('/')[2]+'/'+link.split('/')[3]+'/'
+            link_part2=link.split('/')[4]+':Foil'+'/'+link.split('/')[5]
+            link_foil=link_part1+link_part2
+            foil_soup=BeautifulSoup(get_web(link_foil),'html.parser')
+            foil_price=foil_soup.find_all('div','price-box paper')
+            if len(foil_price):
+                for paper in foil_price:
+                    foil_paperprice=paper.find('div','price-box-price').string
+            else:
+                foil_paperprice='----'
+            content+='{}普:${}\t閃:{}\n{}\n'.format(name,paperprice,foil_paperprice,link)
+            """
     print(content)
     return content
+
 
 
 ###Black
