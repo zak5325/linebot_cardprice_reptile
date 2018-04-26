@@ -34,9 +34,9 @@ def get_web(url):
 app = Flask(__name__)
 
 # Channel Access Token
-line_bot_api = LineBotApi('line access token')
+line_bot_api = LineBotApi('Channel Access Token')
 # Channel Secret
-handler = WebhookHandler('channel secret')
+handler = WebhookHandler('Channel Secret')
 
 # 監聽所有來自 /callback 的 Post Request
 @app.route("/callback", methods=['POST'])
@@ -133,7 +133,9 @@ def get_cards(divs):
                         paperprice=price.find('div','price-box-price').string
                 else:
                     paperprice='----'
-                content+='{}${}\n{}\n'.format(name,paperprice,link)
+                #foil=soup.find('a','otherPrintingsLinkPaper').string
+                content+='{}普:${}\n{}\n'.format(name,paperprice,link)
+                #content+='{}普:${}\n閃:${}\n{}\n'.format(name,paperprice,foil,link)
     print(content)
     return content
 
