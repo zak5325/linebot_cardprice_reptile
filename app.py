@@ -14,8 +14,9 @@ from linebot.models import *
 from bs4 import BeautifulSoup
 import time
 from requests import get
-
+import re
 #environment
+M19 = 'https://www.mtggoldfish.com/spoilers/Core+Set+2019'
 DOM = 'https://www.mtggoldfish.com/spoilers/Dominaria'
 RIX = 'https://www.mtggoldfish.com/spoilers/Rivals+of+Ixalan'
 IXA = 'https://www.mtggoldfish.com/spoilers/Ixalan'
@@ -87,6 +88,8 @@ def CarouselColor(env):
     return carousel_template
 
 def checkenv(env):
+    if env=='M19':
+        env=M19
     if env=='DOM':
         env=DOM
     if env=='RIX':
@@ -103,6 +106,26 @@ def checkenv(env):
         env=KLD
     return env
 
+"""
+def getenv(env):
+    if env=='M19':
+        p_env='Core+Set+2019'
+    if env=='DOM':
+        p_env='Dominaria'
+    if env=='RIX':
+        p_env='Rivals+of+Ixalan'
+    if env=='IXA':
+        p_env='Ixalan'
+    if env=='Hour+of+Devastation':
+        p_env=HOU
+    if env=='AKH':
+        p_env='Amonkhet'
+    if env=='AER':
+        p_env='Aether+Revolt'
+    if env=='KLD':
+        p_env='Kaladesh'
+    return p_env
+"""
 #測試:增加閃卡選擇
 # def foilask():
 #     message = TemplateSendMessage(
@@ -117,7 +140,8 @@ def checkenv(env):
 #     )
 #     line_bot_api.reply_message(event.reply_token, message)
 
-def get_cards(divs):
+def get_cards(env,divs):
+    #p_env=getenv(env)
     content=''
     for div in divs:
         if(div.find('a')):
@@ -135,21 +159,15 @@ def get_cards(divs):
                     paperprice='----'
             content+='{}普:${}\n{}\n'.format(name,paperprice,link)
             """
-            link_part1=link.split('/')[0]+'/'+link.split('/')[1]+'/'+link.split('/')[2]+'/'+link.split('/')[3]+'/'
-            link_part2=link.split('/')[4]+':Foil'+'/'+link.split('/')[5]
-            link_foil=link_part1+link_part2
-            foil_soup=BeautifulSoup(get_web(link_foil),'html.parser')
-            foil_price=foil_soup.find_all('div','price-box paper')
-            if len(foil_price):
-                for paper in foil_price:
-                    foil_paperprice=paper.find('div','price-box-price').string
-            else:
-                foil_paperprice='----'
-            content+='{}普:${}\t閃:{}\n{}\n'.format(name,paperprice,foil_paperprice,link)
+                foilstr=p_env+":Foil"
+                foilp=soup.find_all('a','otherPrintingsLinkPaper',href=re.compile(foilstr))
+                for foil in foilp:
+                    foilprice=foil.string
+            content+='{}普:${}\t閃:{}\n{}\n'.format(name,paperprice,foilprice,link)
             """
+
     print(content)
     return content
-
 
 
 ###Black
@@ -157,194 +175,194 @@ def MythicB(env):
     env=checkenv(env)
     soup=BeautifulSoup(get_web(env),'html.parser')
     divs=soup.find_all('div','B Mythic mix spoiler-card')
-    content=get_cards(divs)
+    content=get_cards(env,divs)
     return content
 def RareB(env):
     env=checkenv(env)
     soup=BeautifulSoup(get_web(env),'html.parser')
     divs=soup.find_all('div','B Rare mix spoiler-card')
-    content=get_cards(divs)
+    content=get_cards(env,divs)
     return content
 def UncommonB(env):
     env=checkenv(env)
     soup=BeautifulSoup(get_web(env),'html.parser')
     divs=soup.find_all('div','B Uncommon mix spoiler-card')
-    content=get_cards(divs)
+    content=get_cards(env,divs)
     return content
 def CommonB(env):
     env=checkenv(env)
     soup=BeautifulSoup(get_web(env),'html.parser')
     divs=soup.find_all('div','B Common mix spoiler-card')
-    content=get_cards(divs)
+    content=get_cards(env,divs)
     return content
 ###White
 def MythicW(env):
     env=checkenv(env)
     soup=BeautifulSoup(get_web(env),'html.parser')
     divs=soup.find_all('div','Mythic W mix spoiler-card')
-    content=get_cards(divs)
+    content=get_cards(env,divs)
     return content
 def RareW(env):
     env=checkenv(env)
     soup=BeautifulSoup(get_web(env),'html.parser')
     divs=soup.find_all('div','Rare W mix spoiler-card')
-    content=get_cards(divs)
+    content=get_cards(env,divs)
     return content
 def UncommonW(env):
     env=checkenv(env)
     soup=BeautifulSoup(get_web(env),'html.parser')
     divs=soup.find_all('div','Uncommon W mix spoiler-card')
-    content=get_cards(divs)
+    content=get_cards(env,divs)
     return content
 def CommonW(env):
     env=checkenv(env)
     soup=BeautifulSoup(get_web(env),'html.parser')
     divs=soup.find_all('div','Common W mix spoiler-card')
-    content=get_cards(divs)
+    content=get_cards(env,divs)
     return content
 ###Red
 def MythicR(env):
     env=checkenv(env)
     soup=BeautifulSoup(get_web(env),'html.parser')
     divs=soup.find_all('div','Mythic R mix spoiler-card')
-    content=get_cards(divs)
+    content=get_cards(env,divs)
     return content
 def RareR(env):
     env=checkenv(env)
     soup=BeautifulSoup(get_web(env),'html.parser')
     divs=soup.find_all('div','R Rare mix spoiler-card')
-    content=get_cards(divs)
+    content=get_cards(env,divs)
     return content
 def UncommonR(env):
     env=checkenv(env)
     soup=BeautifulSoup(get_web(env),'html.parser')
     divs=soup.find_all('div','R Uncommon mix spoiler-card')
-    content=get_cards(divs)
+    content=get_cards(env,divs)
     return content
 def CommonR(env):
     env=checkenv(env)
     soup=BeautifulSoup(get_web(env),'html.parser')
     divs=soup.find_all('div','Common R mix spoiler-card')
-    content=get_cards(divs)
+    content=get_cards(env,divs)
     return content
 ###Blue
 def MythicU(env):
     env=checkenv(env)
     soup=BeautifulSoup(get_web(env),'html.parser')
     divs=soup.find_all('div','Mythic U mix spoiler-card')
-    content=get_cards(divs)
+    content=get_cards(env,divs)
     return content
 def RareU(env):
     env=checkenv(env)
     soup=BeautifulSoup(get_web(env),'html.parser')
     divs=soup.find_all('div','Rare U mix spoiler-card')
-    content=get_cards(divs)
+    content=get_cards(env,divs)
     return content
 def UncommonU(env):
     env=checkenv(env)
     soup=BeautifulSoup(get_web(env),'html.parser')
     divs=soup.find_all('div','U Uncommon mix spoiler-card')
-    content=get_cards(divs)
+    content=get_cards(env,divs)
     return content
 def CommonU(env):
     env=checkenv(env)
     soup=BeautifulSoup(get_web(env),'html.parser')
     divs=soup.find_all('div','Common U mix spoiler-card')
-    content=get_cards(divs)
+    content=get_cards(env,divs)
     return content
 ###Green
 def MythicG(env):
     env=checkenv(env)
     soup=BeautifulSoup(get_web(env),'html.parser')
     divs=soup.find_all('div','G Mythic mix spoiler-card')
-    content=get_cards(divs)
+    content=get_cards(env,divs)
     return content
 def RareG(env):
     env=checkenv(env)
     soup=BeautifulSoup(get_web(env),'html.parser')
     divs=soup.find_all('div','G Rare mix spoiler-card')
-    content=get_cards(divs)
+    content=get_cards(env,divs)
     return content
 def UncommonG(env):
     env=checkenv(env)
     soup=BeautifulSoup(get_web(env),'html.parser')
     divs=soup.find_all('div','G Uncommon mix spoiler-card')
-    content=get_cards(divs)
+    content=get_cards(env,divs)
     return content
 def CommonG(env):
     env=checkenv(env)
     soup=BeautifulSoup(get_web(env),'html.parser')
     divs=soup.find_all('div','Common G mix spoiler-card')
-    content=get_cards(divs)
+    content=get_cards(env,divs)
     return content
 ###Colorless
 def MythicC(env):
     env=checkenv(env)
     soup=BeautifulSoup(get_web(env),'html.parser')
     divs=soup.find_all('div','C Mythic mix spoiler-card')
-    content=get_cards(divs)
+    content=get_cards(env,divs)
     return content
 def RareC(env):
     env=checkenv(env)
     soup=BeautifulSoup(get_web(env),'html.parser')
     divs=soup.find_all('div','C Rare mix spoiler-card')
-    content=get_cards(divs)
+    content=get_cards(env,divs)
     return content
 def UncommonC(env):
     env=checkenv(env)
     soup=BeautifulSoup(get_web(env),'html.parser')
     divs=soup.find_all('div','C Uncommon mix spoiler-card')
-    content=get_cards(divs)
+    content=get_cards(env,divs)
     return content
 def CommonC(env):
     env=checkenv(env)
     soup=BeautifulSoup(get_web(env),'html.parser')
     divs=soup.find_all('div','C Common mix spoiler-card')
-    content=get_cards(divs)
+    content=get_cards(env,divs)
     return content
 ###MultiColor
 def MythicM(env):
     env=checkenv(env)
     soup=BeautifulSoup(get_web(env),'html.parser')
     divs=soup.find_all('div','M Mythic mix spoiler-card')
-    content=get_cards(divs)
+    content=get_cards(env,divs)
     return content
 def RareM(env):
     env=checkenv(env)
     soup=BeautifulSoup(get_web(env),'html.parser')
     divs=soup.find_all('div','M Rare mix spoiler-card')
-    content=get_cards(divs)
+    content=get_cards(env,divs)
     return content
 def UncommonM(env):
     env=checkenv(env)
     soup=BeautifulSoup(get_web(env),'html.parser')
     divs=soup.find_all('div','M Uncommon mix spoiler-card')
-    content=get_cards(divs)
+    content=get_cards(env,divs)
     return content
 ###Land
 def RareL(env):
     env=checkenv(env)
     soup=BeautifulSoup(get_web(env),'html.parser')
     divs=soup.find_all('div','L Rare mix spoiler-card')
-    content=get_cards(divs)
+    content=get_cards(env,divs)
     return content
 def UncommonL(env):
     env=checkenv(env)
     soup=BeautifulSoup(get_web(env),'html.parser')
     divs=soup.find_all('div','L Uncommon mix spoiler-card')
-    content=get_cards(divs)
+    content=get_cards(env,divs)
     return content
 def CommonL(env):
     env=checkenv(env)
     soup=BeautifulSoup(get_web(env),'html.parser')
     divs=soup.find_all('div','Common L mix spoiler-card')
-    content=get_cards(divs)
+    content=get_cards(env,divs)
     return content
 def BasicL(env):
     env=checkenv(env)
     soup=BeautifulSoup(get_web(env),'html.parser')
     divs=soup.find_all('div','Basic L Land mix spoiler-card')
-    content=get_cards(divs)
+    content=get_cards(env,divs)
     return content
 ###
 
@@ -358,29 +376,36 @@ def handle_message(event):
         carousel_template = CarouselTemplate(columns=[
             CarouselColumn(text='選擇環境', title='請選擇', actions=[
                 MessageTemplateAction(
+                    label='M19', text='M19'),
+                MessageTemplateAction(
                     label='多明納里亞', text='多明納里亞'),
                 MessageTemplateAction(
-                    label='決勝依夏蘭', text='決勝依夏蘭'),
-                MessageTemplateAction(
-                    label='依夏蘭', text='依夏蘭')
+                    label='決勝依夏蘭', text='決勝依夏蘭')
             ]),
             CarouselColumn(text='選擇環境', title='請選擇', actions=[
+                MessageTemplateAction(
+                    label='依夏蘭', text='依夏蘭'),
                 MessageTemplateAction(
                     label='幻滅時刻', text='幻滅時刻'),
                 MessageTemplateAction(
-                    label='阿芒凱', text='阿芒凱'),
-                MessageTemplateAction(
-                    label='乙太之亂', text='乙太之亂')
+                    label='阿芒凱', text='阿芒凱')
             ]),
             CarouselColumn(text='選擇環境', title='請選擇', actions=[
                 MessageTemplateAction(
-                    label='卡拉德許', text='卡拉德許'),
+                    label='乙太之亂', text='乙太之亂'),
                 MessageTemplateAction(
-                    label='--', text='--'),
+                    label='卡拉德許', text='卡拉德許'),
                 MessageTemplateAction(
                     label='--', text='--')
             ])
         ])
+        template_message = TemplateSendMessage(
+            alt_text='envionment template', template=carousel_template)
+        line_bot_api.reply_message(event.reply_token, template_message)
+        return 0
+    if event.message.text == "M19":
+        envionment='M19'
+        carousel_template =CarouselColor(envionment)
         template_message = TemplateSendMessage(
             alt_text='envionment template', template=carousel_template)
         line_bot_api.reply_message(event.reply_token, template_message)
