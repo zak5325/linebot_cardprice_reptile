@@ -16,6 +16,7 @@ import time
 from requests import get
 import re
 #environment
+GRN = 'https://www.mtggoldfish.com/spoilers/Guilds+of+Ravnica'
 M19 = 'https://www.mtggoldfish.com/spoilers/Core+Set+2019'
 DOM = 'https://www.mtggoldfish.com/spoilers/Dominaria'
 RIX = 'https://www.mtggoldfish.com/spoilers/Rivals+of+Ixalan'
@@ -82,12 +83,14 @@ def CarouselColor(env):
                 MessageTemplateAction(
                     label='地', text=env+'地'),
                 MessageTemplateAction(
-                    label='--', text='--')
+                    label='其他', text=env+'其他')
             ]),
         ])
     return carousel_template
 
 def checkenv(env):
+    if env=='GRN':
+        env=GRN
     if env=='M19':
         env=M19
     if env=='DOM':
@@ -96,14 +99,14 @@ def checkenv(env):
         env=RIX
     if env=='IXA':
         env=IXA
-    if env=='HOU':
-        env=HOU
-    if env=='AKH':
-        env=AKH
-    if env=='AER':
-        env=AER
-    if env=='KLD':
-        env=KLD
+#    if env=='HOU':
+#        env=HOU
+#    if env=='AKH':
+#        env=AKH
+#    if env=='AER':
+#        env=AER
+#    if env=='KLD':
+#        env=KLD
     return env
 
 """
@@ -157,7 +160,8 @@ def get_cards(env,divs):
                         paperprice=price.find('div','price-box-price').string
                 else:
                     paperprice='----'
-            content+='{}普:${}\n{}\n'.format(name,paperprice,link)
+            content+='{}普:${}\n'.format(name,paperprice)
+            #content+='{}普:${}\n{}\n'.format(name,paperprice,link)
             """
                 foilstr=p_env+":Foil"
                 foilp=soup.find_all('a','otherPrintingsLinkPaper',href=re.compile(foilstr))
@@ -364,6 +368,12 @@ def BasicL(env):
     divs=soup.find_all('div','Basic L Land mix spoiler-card')
     content=get_cards(env,divs)
     return content
+def OTHER(env):
+    env=checkenv(env)
+    soup=BeautifulSoup(get_web(env),'html.parser')
+    divs=soup.find_all('div',[re.compile("-dfc"),re.compile("H$")])
+    content=get_cards(env,divs)
+    return content
 ###
 
 
@@ -376,29 +386,36 @@ def handle_message(event):
         carousel_template = CarouselTemplate(columns=[
             CarouselColumn(text='選擇環境', title='請選擇', actions=[
                 MessageTemplateAction(
+                    label='烽會拉尼卡', text='烽會拉尼卡'),
+                MessageTemplateAction(
                     label='M19', text='M19'),
                 MessageTemplateAction(
-                    label='多明納里亞', text='多明納里亞'),
-                MessageTemplateAction(
-                    label='決勝依夏蘭', text='決勝依夏蘭')
+                    label='多明納里亞', text='多明納里亞')
             ]),
             CarouselColumn(text='選擇環境', title='請選擇', actions=[
+                MessageTemplateAction(
+                    label='決勝依夏蘭', text='決勝依夏蘭'),
                 MessageTemplateAction(
                     label='依夏蘭', text='依夏蘭'),
                 MessageTemplateAction(
-                    label='幻滅時刻', text='幻滅時刻'),
-                MessageTemplateAction(
-                    label='阿芒凱', text='阿芒凱')
+                    label='--', text='--')
             ]),
             CarouselColumn(text='選擇環境', title='請選擇', actions=[
                 MessageTemplateAction(
-                    label='乙太之亂', text='乙太之亂'),
+                    label='--', text='--'),
                 MessageTemplateAction(
-                    label='卡拉德許', text='卡拉德許'),
+                    label='--', text='--'),
                 MessageTemplateAction(
                     label='--', text='--')
             ])
         ])
+        template_message = TemplateSendMessage(
+            alt_text='envionment template', template=carousel_template)
+        line_bot_api.reply_message(event.reply_token, template_message)
+        return 0
+    if event.message.text == "烽會拉尼卡":
+        envionment='GRN'
+        carousel_template =CarouselColor(envionment)
         template_message = TemplateSendMessage(
             alt_text='envionment template', template=carousel_template)
         line_bot_api.reply_message(event.reply_token, template_message)
@@ -426,34 +443,6 @@ def handle_message(event):
         return 0
     if event.message.text == "依夏蘭":
         envionment='IXA'
-        carousel_template =CarouselColor(envionment)
-        template_message = TemplateSendMessage(
-            alt_text='envionment template', template=carousel_template)
-        line_bot_api.reply_message(event.reply_token, template_message)
-        return 0
-    if event.message.text == "幻滅時刻":
-        envionment='HOU'
-        carousel_template =CarouselColor(envionment)
-        template_message = TemplateSendMessage(
-            alt_text='envionment template', template=carousel_template)
-        line_bot_api.reply_message(event.reply_token, template_message)
-        return 0
-    if event.message.text == "阿芒凱":
-        envionment='AKH'
-        carousel_template =CarouselColor(envionment)
-        template_message = TemplateSendMessage(
-            alt_text='envionment template', template=carousel_template)
-        line_bot_api.reply_message(event.reply_token, template_message)
-        return 0
-    if event.message.text == "乙太之亂":
-        envionment='AER'
-        carousel_template =CarouselColor(envionment)
-        template_message = TemplateSendMessage(
-            alt_text='envionment template', template=carousel_template)
-        line_bot_api.reply_message(event.reply_token, template_message)
-        return 0
-    if event.message.text == "卡拉德許":
-        envionment='KLD'
         carousel_template =CarouselColor(envionment)
         template_message = TemplateSendMessage(
             alt_text='envionment template', template=carousel_template)
@@ -694,6 +683,13 @@ def handle_message(event):
             )
         )
         line_bot_api.reply_message(event.reply_token, buttons_template)
+        return 0
+    if event.message.text.find('其他')!=-1:
+        envionment = event.message.text[0:3]
+        content = OTHER(envionment)
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text=content))
         return 0
     if event.message.text.find('Black Mythic')!=-1:
         envionment = event.message.text[0:3]

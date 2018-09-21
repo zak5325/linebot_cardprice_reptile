@@ -33,6 +33,8 @@ https://yaoandy107.github.io/line-bot-tutorial/#%E4%BD%BF%E7%94%A8-Heroku-CLI
 如有其他建議或是有bug可以在主頁下面留言給我,會盡快做修復
 
 
+#20180922
+新增GRN環境,再選色&地的template增加其他選項,用於因應雙面牌,連體牌,再請各路測試找bug,感謝!
 #20180811
 新增M19環境
 #20180423
