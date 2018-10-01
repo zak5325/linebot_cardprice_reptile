@@ -656,7 +656,7 @@ def handle_message(event):
                         text=envionment+' MultiColor Uncommon'
                     )
                     MessageTemplateAction(
-                        label='Uncommon',
+                        label='Common',
                         text=envionment+' MultiColor Common'
                     )
                 ]
