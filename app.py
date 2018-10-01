@@ -160,8 +160,7 @@ def get_cards(env,divs):
                         paperprice=price.find('div','price-box-price').string
                 else:
                     paperprice='----'
-            content+='{}普:${}\n'.format(name,paperprice)
-            #content+='{}普:${}\n{}\n'.format(name,paperprice,link)
+            content+='{}普:${}\n{}\n'.format(name,paperprice,link)
             """
                 foilstr=p_env+":Foil"
                 foilp=soup.find_all('a','otherPrintingsLinkPaper',href=re.compile(foilstr))
