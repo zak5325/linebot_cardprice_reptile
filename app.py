@@ -343,6 +343,12 @@ def UncommonM(env):
     divs=soup.find_all('div','M Uncommon mix spoiler-card')
     content=get_cards(env,divs)
     return content
+def CommonM(env):
+    env=checkenv(env)
+    soup=BeautifulSoup(get_web(env),'html.parser')
+    divs=soup.find_all('div','Common M mix spoiler-card')
+    content=get_cards(env,divs)
+    return content
 ###Land
 def RareL(env):
     env=checkenv(env)
@@ -649,6 +655,10 @@ def handle_message(event):
                         label='Uncommon',
                         text=envionment+' MultiColor Uncommon'
                     )
+                    MessageTemplateAction(
+                        label='Uncommon',
+                        text=envionment+' MultiColor Common'
+                    )
                 ]
             )
         )
@@ -876,6 +886,13 @@ def handle_message(event):
     if event.message.text.find('MultiColor Uncommon')!=-1:
         envionment = event.message.text[0:3]
         content = UncommonM(envionment)
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text=content))
+        return 0
+    if event.message.text.find('MultiColor Common')!=-1:
+        envionment = event.message.text[0:3]
+        content = CommonM(envionment)
         line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(text=content))
