@@ -170,7 +170,7 @@ def get_cards(env,divs):
             content+='{}普:${}\t閃:{}\n{}\n'.format(name,paperprice,foilprice,link)
             """
 
-    print(content)
+    #print(content)
     return content
 
 
