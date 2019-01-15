@@ -17,6 +17,7 @@ from requests import get
 import re
 #environment
 UMA = 'https://www.mtggoldfish.com/spoilers/Ultimate+Masters'
+RNA = 'https://www.mtggoldfish.com/spoilers/Ravnica+Allegiance'
 GRN = 'https://www.mtggoldfish.com/spoilers/Guilds+of+Ravnica'
 M19 = 'https://www.mtggoldfish.com/spoilers/Core+Set+2019'
 DOM = 'https://www.mtggoldfish.com/spoilers/Dominaria'
@@ -90,6 +91,8 @@ def CarouselColor(env):
     return carousel_template
 
 def checkenv(env):
+    if env=='RNA':
+        env=RNA
     if env=='GRN':
         env=GRN
     if env=='M19':
@@ -100,8 +103,6 @@ def checkenv(env):
         env=RIX
     if env=='IXA':
         env=IXA
-    if env=='UMA':
-        env=UMA
 #    if env=='HOU':
 #        env=HOU
 #    if env=='AKH':
@@ -500,19 +501,19 @@ def handle_message(event):
         carousel_template = CarouselTemplate(columns=[
             CarouselColumn(text='選擇環境', title='請選擇', actions=[
                 MessageTemplateAction(
+                    label='效忠拉尼卡(RNA)', text='效忠拉尼卡'),
+                MessageTemplateAction(
                     label='烽會拉尼卡(GRN)', text='烽會拉尼卡'),
                 MessageTemplateAction(
                     label='Core Set 2019(M19)', text='M19'),
-                MessageTemplateAction(
-                    label='多明納里亞(DOM)', text='多明納里亞')
             ]),
             CarouselColumn(text='選擇環境', title='請選擇', actions=[
+                MessageTemplateAction(
+                    label='多明納里亞(DOM)', text='多明納里亞')
                 MessageTemplateAction(
                     label='決勝依夏蘭(RIX)', text='決勝依夏蘭'),
                 MessageTemplateAction(
                     label='依夏蘭(IXA)', text='依夏蘭'),
-                MessageTemplateAction(
-                    label='--', text='--')
             ]),
             CarouselColumn(text='選擇環境', title='請選擇', actions=[
                 MessageTemplateAction(
@@ -520,9 +521,16 @@ def handle_message(event):
                 MessageTemplateAction(
                     label='--', text='--'),
                 MessageTemplateAction(
-                    label='終極大師(UMA)', text='終極大師')
+                    label='--', text='--'),
             ])
         ])
+        template_message = TemplateSendMessage(
+            alt_text='envionment template', template=carousel_template)
+        line_bot_api.reply_message(event.reply_token, template_message)
+        return 0
+    if event.message.text == "效忠拉尼卡":
+        envionment='RNA'
+        carousel_template =CarouselColor(envionment)
         template_message = TemplateSendMessage(
             alt_text='envionment template', template=carousel_template)
         line_bot_api.reply_message(event.reply_token, template_message)
@@ -557,13 +565,6 @@ def handle_message(event):
         return 0
     if event.message.text == "依夏蘭":
         envionment='IXA'
-        carousel_template =CarouselColor(envionment)
-        template_message = TemplateSendMessage(
-            alt_text='envionment template', template=carousel_template)
-        line_bot_api.reply_message(event.reply_token, template_message)
-        return 0
-    if event.message.text == "終極大師":
-        envionment='UMA'
         carousel_template =CarouselColor(envionment)
         template_message = TemplateSendMessage(
             alt_text='envionment template', template=carousel_template)
